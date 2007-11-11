@@ -5,15 +5,15 @@ use Acme::LOLCAT ();
 
 =head1 NAME
 
-Catalyst::Plugin::Acme::LOLCAT - IM IN UR CATALYST APPLECASHUN REWRITINS YUR OUTPUTS.
+Catalyst::Plugin::Acme::LOLCAT - IM IN UR CATALYST APLACASHUN REWRITIN YUR OUTPUTS.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 =head1 SYNOPSIS
 
@@ -60,7 +60,7 @@ sub finalize {
                  and
                  not grep /$skip/, @queue )
             {
-                my $txt = Acme::LOLCAT::translate($t->[1]);
+                my $txt = $t->[1] =~ /\w/ ? Acme::LOLCAT::translate($t->[1]) : $t->[1];
                 $repaired .= $txt;
             }
             else
