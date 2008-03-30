@@ -9,11 +9,11 @@ Catalyst::Plugin::Acme::LOLCAT - IM IN UR CATALYST APLACASHUN REWRITIN YUR OUTPU
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 =head1 SYNOPSIS
 
@@ -29,7 +29,7 @@ your Catalyst plain text and HTML output.
 
 =cut
 
-my $skip = qr/script|style|map|area/;
+my $skip = qr/\Ascript|style\z/;
 
 sub finalize {
     my $c = shift;
@@ -52,7 +52,10 @@ sub finalize {
         while ( my $t = $p->get_token() )
         {
             push @queue, $t->[1] if $t->[0] eq 'S'; # assumes well-formed
-            pop @queue if $t->[0] eq 'E';
+            pop @queue if $t->[0] eq 'E'
+                or 
+                ( $t->[0] eq 'S' and $t->[-1] =~ m,/>\z, ); # self-closer
+
             if ( 
                  $t->[0] eq 'T'
                  and
